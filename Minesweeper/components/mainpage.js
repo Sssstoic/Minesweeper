@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const MainPage = () => {
   return (
     <View style={styles.container}>
-      <Text>This is the Main Page!</Text>
+      <Text>This is the Main Page of Minesweeper!</Text>
     </View>
   );
 };

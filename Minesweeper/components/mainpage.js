@@ -7,7 +7,7 @@ const MainMenu = ({ onDifficultySelect }) => {
       {/* Title */}
       <Text style={styles.title}>Minesweeper</Text>
       <Image
-      source={require('../assets/LOL.png')}  
+      source={require('../assets/bomb.png')}  
       style={styles.logo}
       />
       {/* Difficulty Selection */}

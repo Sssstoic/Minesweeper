@@ -7,9 +7,9 @@ const MainPage = () => {
 
   // Get the color based on difficulty
   const getDifficultyColor = (value) => {
-    if (value < 1.5) return 'green';  // Easy
-    if (value < 2.5) return 'yellow'; // Medium
-    return 'red';                     // Hard
+    if (value < 1.5) return '#7ABA78';  // Easy
+    if (value < 2.5) return '#FABC3F'; // Medium
+    return '#C80036';                     // Hard
   };
 
   const getDifficultyText = (value) => {

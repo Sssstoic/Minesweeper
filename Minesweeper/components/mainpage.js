@@ -5,11 +5,12 @@ const MainMenu = ({ onDifficultySelect }) => {
   return (
     <View style={styles.container}>
       {/* Title */}
-      <Text style={styles.title}>Minesweeper</Text>
+      <Text style={styles.title}>MINESWEEPER</Text>
       <Image
       source={require('../assets/bomb.png')}  
       style={styles.logo}
       />
+      <Text style={styles.instructions}>These are the instructions</Text>
       {/* Difficulty Selection */}
       <View style={styles.difficultyContainer}>
         <TouchableOpacity style={styles.button} onPress={() => onDifficultySelect('easy')}>
@@ -62,6 +63,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
+  instructions: {
+    color: "#F1F1F1F1",
+    fontSize: 16,
+  }
 });
 
 export default MainMenu;

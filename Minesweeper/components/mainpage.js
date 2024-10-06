@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import Slider from '@react-native-community/slider';  // If you're using the community slider package
+import Slider from '@react-native-community/slider';  
 
 const MainPage = () => {
   const [difficulty, setDifficulty] = useState(1);
@@ -21,11 +21,11 @@ const MainPage = () => {
   return (
     <View style={styles.container}>
       {/* Minesweeper Title */}
-      <Text style={styles.title}>Minesweeper</Text>
+      <Text style={styles.title}>MINESWEEPER</Text>
 
       {/* Minesweeper Logo */}
       <Image
-        source={require('./assets/LOL.png')}  // Ensure the logo path is correct
+        source={require('../assets/bomb.png')}  
         style={styles.logo}
       />
 
@@ -37,16 +37,20 @@ const MainPage = () => {
         style={styles.slider}
         minimumValue={1}
         maximumValue={3}
-        step={1}  // Snap to 1, 2, or 3 (Easy, Medium, Hard)
+        step={1}  
         onValueChange={(value) => setDifficulty(value)}
         minimumTrackTintColor={getDifficultyColor(difficulty)}
         maximumTrackTintColor="#000000"
-        thumbTintColor={getDifficultyColor(difficulty)}  // Thumb color changes with difficulty
+        thumbTintColor={getDifficultyColor(difficulty)} 
       />
 
-      {/* Instructions (Optional) */}
+      {/* Instructions*/}
       <Text style={styles.instructions}>
-        Drag the slider to select the difficulty: Easy (Green), Medium (Yellow), or Hard (Red)
+      Welcome to Minesweeper! The goal is to clear all the cells without detonating any mines.
+      - Tap on a cell to reveal what's underneath.
+      - Numbers show how many mines are adjacent to that cell.
+      - Long press to flag a cell if you think there's a mine.
+      Clear the board to win. Good luck!
       </Text>
     </View>
   );
@@ -57,13 +61,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    padding: 20,
+    backgroundColor: '#212121',
+    padding: 80,
   },
   title: {
     fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 30,
+    color: "#f0f0f0"
   },
   logo: {
     width: 150,
@@ -77,14 +82,14 @@ const styles = StyleSheet.create({
   },
   slider: {
     width: 300,
-    height: 40,
+    height: 80,
     marginBottom: 20,
   },
   instructions: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
-    color: '#333',
-    paddingHorizontal: 20,
+    color: '#f0f0f0',
+    paddingHorizontal: 2,
   },
 });
 

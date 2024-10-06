@@ -1,34 +1,53 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import Slider from '@react-native-community/slider';  // If you're using the community slider package
 
-const MainMenu = ({ onDifficultySelect }) => {
+const MainPage = () => {
+  const [difficulty, setDifficulty] = useState(1);
+
+  // Get the color based on difficulty
+  const getDifficultyColor = (value) => {
+    if (value < 1.5) return 'green';  // Easy
+    if (value < 2.5) return 'yellow'; // Medium
+    return 'red';                     // Hard
+  };
+
+  const getDifficultyText = (value) => {
+    if (value < 1.5) return 'Easy';
+    if (value < 2.5) return 'Medium';
+    return 'Hard';
+  };
+
   return (
     <View style={styles.container}>
-      {/* Title */}
-      <Text style={styles.title}>MINESWEEPER</Text>
+      {/* Minesweeper Title */}
+      <Text style={styles.title}>Minesweeper</Text>
+
+      {/* Minesweeper Logo */}
       <Image
-      source={require('../assets/bomb.png')}  
-      style={styles.logo}
+        source={require('./assets/LOL.png')}  // Ensure the logo path is correct
+        style={styles.logo}
       />
+
+      {/* Difficulty Slider */}
+      <Text style={[styles.difficultyText, { color: getDifficultyColor(difficulty) }]}>
+        {getDifficultyText(difficulty)}
+      </Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={1}
+        maximumValue={3}
+        step={1}  // Snap to 1, 2, or 3 (Easy, Medium, Hard)
+        onValueChange={(value) => setDifficulty(value)}
+        minimumTrackTintColor={getDifficultyColor(difficulty)}
+        maximumTrackTintColor="#000000"
+        thumbTintColor={getDifficultyColor(difficulty)}  // Thumb color changes with difficulty
+      />
+
+      {/* Instructions (Optional) */}
       <Text style={styles.instructions}>
-      Welcome to Minesweeper! The goal is to clear all the cells without detonating any mines.
-      - Tap on a cell to reveal what's underneath.
-      - Numbers show how many mines are adjacent to that cell.
-      - Long press to flag a cell if you think there's a mine.
-      Clear the board to win. Good luck!
-    </Text>
-      {/* Difficulty Selection */}
-      <View style={styles.difficultyContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => onDifficultySelect('easy')}>
-          <Text style={styles.buttonText}>Easy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => onDifficultySelect('medium')}>
-          <Text style={styles.buttonText}>Medium</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => onDifficultySelect('hard')}>
-          <Text style={styles.buttonText}>Hard</Text>
-        </TouchableOpacity>
-      </View>
+        Drag the slider to select the difficulty: Easy (Green), Medium (Yellow), or Hard (Red)
+      </Text>
     </View>
   );
 };
@@ -36,43 +55,37 @@ const MainMenu = ({ onDifficultySelect }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#282c34',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
     padding: 20,
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 20,
+    marginBottom: 30,
   },
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 30,
+    marginBottom: 20,
   },
-  difficultyContainer: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#61dafb',
-    padding: 15,
-    borderRadius: 10,
-    width: 200,
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  buttonText: {
-    color: '#000',
+  difficultyText: {
+    fontSize: 24,
     fontWeight: 'bold',
-    fontSize: 18,
+    marginBottom: 20,
+  },
+  slider: {
+    width: 300,
+    height: 40,
+    marginBottom: 20,
   },
   instructions: {
-    color: "#F1F1F1F1",
     fontSize: 16,
-  }
+    textAlign: 'center',
+    color: '#333',
+    paddingHorizontal: 20,
+  },
 });
 
-export default MainMenu;
+export default MainPage;

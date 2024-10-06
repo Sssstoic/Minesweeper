@@ -43,8 +43,8 @@ const MainPage = () => {
         style={styles.slider}
         minimumValue={1}
         maximumValue={3}
-        step={1}  
-        onValueChange={(value) => setDifficulty(value)}
+        value={difficulty}
+        onValueChange={(value) => setDifficulty(value)} 
         minimumTrackTintColor={getDifficultyColor(difficulty)}
         maximumTrackTintColor="#000000"
         thumbTintColor={getDifficultyColor(difficulty)} 
@@ -84,7 +84,7 @@ const MainPage = () => {
               Clear the board to win. Good luck!
             </Text>
             <TouchableOpacity
-              style={[styles.playButton, { backgroundColor: '#7ABA78' }]}  // Close button with same style
+              style={[styles.playButton, { backgroundColor: '#7ABA78' }]}  
               onPress={() => setModalVisible(false)}
             >
               <Text style={styles.playButtonText}>Close</Text>

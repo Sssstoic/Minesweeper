@@ -6,13 +6,10 @@ const MainMenu = ({ onDifficultySelect }) => {
     <View style={styles.container}>
       {/* Title */}
       <Text style={styles.title}>Minesweeper</Text>
-
-      {/* Placeholder for the Logo */}
       <Image
-        source={{ uri: 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo1.png' }} // replace with actual logo URL
-        style={styles.logo}
+      source={require('../assets/LOL.png')}  
+      style={styles.logo}
       />
-
       {/* Difficulty Selection */}
       <View style={styles.difficultyContainer}>
         <TouchableOpacity style={styles.button} onPress={() => onDifficultySelect('easy')}>

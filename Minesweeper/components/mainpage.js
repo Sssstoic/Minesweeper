@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#212121',
+    backgroundColor: '#212431',
     padding: 80,
   },
   title: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalView: {
-    backgroundColor: '#fff',
+    backgroundColor: '#212431',
     borderRadius: 10,
     padding: 30,
     alignItems: 'center',
@@ -183,11 +183,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 15,
+    color: "#fff"
   },
   modalInstructions: {
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
+    color: "#fff"
   },
 });
 

@@ -1,28 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';  // Make sure Text is imported correctly
-import MainMenu from './components/mainpage';
+import { View, StyleSheet } from 'react-native';
+import DifficultySlider from './components/mainpage';  
 
 export default function App() {
-  const [difficulty, setDifficulty] = useState<string | null>(null);  // String type for difficulty
-
-  const handleDifficultySelect = (selectedDifficulty: 'easy' | 'medium' | 'hard') => {  // Explicitly type the parameter
-    setDifficulty(selectedDifficulty);
-    console.log(`Selected difficulty: ${selectedDifficulty}`);
-    // You can add navigation logic or game setup based on the difficulty
-  };
-
   return (
-    <>
-      {difficulty ? (
-        <View>
-          {/* Ensure Text and View are correctly imported */}
-          <Text>Game Screen - Difficulty: {difficulty}</Text>
-        </View>
-      ) : (
-        <MainMenu onDifficultySelect={handleDifficultySelect} />
-      )}
+    <View style={styles.container}>
+      <DifficultySlider />
       <StatusBar style="auto" />
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+});

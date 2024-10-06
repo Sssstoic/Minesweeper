@@ -29,6 +29,15 @@ const MainPage = () => {
         style={styles.logo}
       />
 
+      {/* Instructions*/}
+      <Text style={styles.instructions}>
+      Welcome to Minesweeper! The goal is to clear all the cells without detonating any mines.
+      - Tap on a cell to reveal what's underneath.
+      - Numbers show how many mines are adjacent to that cell.
+      - Long press to flag a cell if you think there's a mine.
+      Clear the board to win. Good luck!
+      </Text>
+
       {/* Difficulty Slider */}
       <Text style={[styles.difficultyText, { color: getDifficultyColor(difficulty) }]}>
         {getDifficultyText(difficulty)}
@@ -43,15 +52,6 @@ const MainPage = () => {
         maximumTrackTintColor="#000000"
         thumbTintColor={getDifficultyColor(difficulty)} 
       />
-
-      {/* Instructions*/}
-      <Text style={styles.instructions}>
-      Welcome to Minesweeper! The goal is to clear all the cells without detonating any mines.
-      - Tap on a cell to reveal what's underneath.
-      - Numbers show how many mines are adjacent to that cell.
-      - Long press to flag a cell if you think there's a mine.
-      Clear the board to win. Good luck!
-      </Text>
     </View>
   );
 };
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   difficultyText: {
+    marginTop: 54,
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,

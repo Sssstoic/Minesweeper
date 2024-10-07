@@ -1,22 +1,27 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, StyleSheet } from 'react-native';
-import DifficultySlider from './components/mainpage';  
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import MainPage from './components/mainpage'; // Make sure this path is correct
+import Minesweeper from './components/minesweeper'; // Ensure this path is correct
+
+// Define the parameters for your navigation stack
+type RootStackParamList = {
+  MainPage: undefined; // No parameters for MainPage
+  Minesweeper: { difficulty: number }; // Parameter for Minesweeper
+};
+
+// Create a stack navigator with the defined parameter list
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <DifficultySlider />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="MainPage">
+        <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="Minesweeper" component={Minesweeper} />
+      </Stack.Navigator>
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-});

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
 
-const Minesweeper = ({ navigation }) => {
+const Minesweeper = ({ route, navigation }) => {
+  const { difficulty } = route.params;  // Get difficulty passed from MainPage
+
   const boardSize = 8;  // Simple 8x8 board
   const bombCount = 10; // 10 bombs
   const [board, setBoard] = useState([]);
@@ -106,7 +108,6 @@ const Minesweeper = ({ navigation }) => {
     }
   };
 
-  // Check if player won
   const checkWin = () => {
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
@@ -118,7 +119,6 @@ const Minesweeper = ({ navigation }) => {
     return true;
   };
 
-  // Use hint to reveal a safe cell
   const useHint = () => {
     if (hintUsed) return;
     for (let row = 0; row < boardSize; row++) {
@@ -132,7 +132,6 @@ const Minesweeper = ({ navigation }) => {
     }
   };
 
-  // Initialize board when component mounts
   useEffect(() => {
     initializeBoard();
   }, []);
@@ -164,7 +163,9 @@ const Minesweeper = ({ navigation }) => {
                 ]}
               >
                 {cell.revealed && !cell.hasBomb && <Text>{cell.adjacentBombs || ''}</Text>}
-                {cell.revealed && cell.hasBomb && <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />}
+                {cell.revealed && cell.hasBomb && (
+                  <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
+                )}
               </TouchableOpacity>
             ))}
           </View>
@@ -174,10 +175,16 @@ const Minesweeper = ({ navigation }) => {
       {/* Bomb counter and tools */}
       <View style={styles.tools}>
         <Text style={styles.bombCounter}>Bombs left: {flagsLeft}</Text>
-        <TouchableOpacity onPress={() => setSelectedTool('shovel')}>
+        <TouchableOpacity
+          onPress={() => setSelectedTool('shovel')}
+          style={[styles.toolButton, selectedTool === 'shovel' && styles.selectedTool]}
+        >
           <Image source={require('../assets/shovel.png')} style={styles.toolIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSelectedTool('flag')}>
+        <TouchableOpacity
+          onPress={() => setSelectedTool('flag')}
+          style={[styles.toolButton, selectedTool === 'flag' && styles.selectedTool]}
+        >
           <Image source={require('../assets/flag.png')} style={styles.toolIcon} />
         </TouchableOpacity>
         <TouchableOpacity onPress={useHint} disabled={hintUsed}>
@@ -218,44 +225,58 @@ const styles = StyleSheet.create({
   cell: {
     width: 40,
     height: 40,
-    backgroundColor: '#888',
-    margin: 2,
+    backgroundColor: '#333',
+    margin: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   revealedCell: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#999',
   },
   flaggedCell: {
     backgroundColor: '#f00',
   },
   bombIcon: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
   },
   tools: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#222',
+    padding: 10,
+    borderRadius: 10,
     width: '90%',
     marginBottom: 20,
   },
   bombCounter: {
     color: '#fff',
-    fontSize: 18,
+    marginRight: 20,
+  },
+  toolButton: {
+    marginHorizontal: 10,
+    padding: 10,
+    backgroundColor: '#444',
+    borderRadius: 50,
+  },
+  selectedTool: {
+    borderColor: 'green',
+    borderWidth: 2,
   },
   toolIcon: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
   },
   hintButton: {
-    backgroundColor: '#ffcc00',
+    marginLeft: 20,
+    color: '#fff',
+    backgroundColor: '#555',
     padding: 10,
     borderRadius: 5,
-    color: '#000',
   },
   disabledHint: {
-    backgroundColor: '#555',
+    opacity: 0.3,
   },
 });
 

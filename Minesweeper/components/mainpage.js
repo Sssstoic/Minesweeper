@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity, Modal } from 'react-native';
-import Slider from '@react-native-community/slider';  
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
+import Slider from '@react-native-community/slider';
 
-const MainPage = () => {
+const MainPage = ({ navigation }) => {  
   const [difficulty, setDifficulty] = useState(1);
-  const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // Get the color based on difficulty
   const getDifficultyColor = (value) => {
     if (value < 1.5) return '#7ABA78';  // Easy
     if (value < 2.5) return '#FABC3F';  // Medium
@@ -20,22 +19,18 @@ const MainPage = () => {
   };
 
   const handlePlayPress = () => {
-    // Logic to start the game based on the difficulty level can be added here
     console.log('Game started at difficulty:', getDifficultyText(difficulty));
+    // Navigate to the Minesweeper screen with difficulty
+    navigation.navigate('Minesweeper', { difficulty });
   };
 
   return (
     <View style={styles.container}>
-      {/* Minesweeper Title */}
       <Text style={styles.title}>MINESWEEPER</Text>
-
-      {/* Minesweeper Logo */}
       <Image
         source={require('../assets/bomb.png')}  
         style={styles.logo}
       />
-
-      {/* Difficulty Slider */}
       <Text style={[styles.difficultyText, { color: getDifficultyColor(difficulty) }]}>
         {getDifficultyText(difficulty)}
       </Text>
@@ -49,8 +44,6 @@ const MainPage = () => {
         maximumTrackTintColor="#000000"
         thumbTintColor={getDifficultyColor(difficulty)} 
       />
-
-      {/* Play Button */}
       <TouchableOpacity
         style={[styles.playButton, { backgroundColor: getDifficultyColor(difficulty) }]}
         onPress={handlePlayPress}
@@ -58,15 +51,13 @@ const MainPage = () => {
         <Text style={styles.playButtonText}>PLAY</Text>
       </TouchableOpacity>
 
-      {/* Help Button */}
       <TouchableOpacity
         style={styles.helpButton}
-        onPress={() => setModalVisible(true)}  // Open instructions modal
+        onPress={() => setModalVisible(true)}
       >
         <Text style={styles.helpButtonText}>?</Text>
       </TouchableOpacity>
 
-      {/* Modal for Instructions */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -124,13 +115,6 @@ const styles = StyleSheet.create({
   slider: {
     width: 300,
     height: 80,
-    marginBottom: 20,
-  },
-  instructions: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: '#f0f0f0',
-    paddingHorizontal: 2,
     marginBottom: 20,
   },
   playButton: {

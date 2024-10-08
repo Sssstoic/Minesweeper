@@ -186,7 +186,7 @@ const revealBombs = async (clickedRow, clickedCol) => {
                   styles.cell,
                   cell.revealed && styles.revealedCell,
                   cell.flagged && styles.flaggedCell,
-                  { borderWidth: 2, borderColor: '#666' }, // Adding border to each cell
+                  { borderWidth: 3, borderColor: '#333' }, 
                 ]}
               >
                 {cell.revealed && !cell.hasBomb && (

@@ -2,8 +2,8 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import MainPage from './components/mainpage'; // Make sure this path is correct
-import Minesweeper from './components/minesweeper'; // Ensure this path is correct
+import MainPage from './components/mainpage'; 
+import Minesweeper from './components/minesweeper'; 
 
 // Define the parameters for your navigation stack
 type RootStackParamList = {

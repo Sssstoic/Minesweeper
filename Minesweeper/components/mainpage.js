@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
 import Slider from '@react-native-community/slider';
 
-const MainPage = ({ navigation }) => {  
+const MainPage = ({ navigation }) => {
   const [difficulty, setDifficulty] = useState(1);
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const getDifficultyColor = (value) => {
@@ -24,11 +25,22 @@ const MainPage = ({ navigation }) => {
     navigation.navigate('Minesweeper', { difficulty });
   };
 
+  const handleSlidingComplete = (value) => {
+    // Snap the value to 1, 2, or 3 based on the closest point
+    if (value < 1.5) {
+      setDifficulty(1);  // Easy
+    } else if (value < 2.5) {
+      setDifficulty(2);  // Medium
+    } else {
+      setDifficulty(3);  // Hard
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MINESWEEPER</Text>
       <Image
-        source={require('../assets/bomb.png')}  
+        source={require('../assets/bomb.png')}
         style={styles.logo}
       />
       <Text style={[styles.difficultyText, { color: getDifficultyColor(difficulty) }]}>
@@ -40,9 +52,11 @@ const MainPage = ({ navigation }) => {
         maximumValue={3}
         value={difficulty}
         onValueChange={(value) => setDifficulty(value)} 
+        onSlidingComplete={handleSlidingComplete}
+        step={0.01}  // Allows smooth sliding
         minimumTrackTintColor={getDifficultyColor(difficulty)}
         maximumTrackTintColor="#000000"
-        thumbTintColor={getDifficultyColor(difficulty)} 
+        thumbTintColor={getDifficultyColor(difficulty)}
       />
       <TouchableOpacity
         style={[styles.playButton, { backgroundColor: getDifficultyColor(difficulty) }]}
@@ -75,7 +89,7 @@ const MainPage = ({ navigation }) => {
               Clear the board to win. Good luck!
             </Text>
             <TouchableOpacity
-              style={[styles.playButton, { backgroundColor: '#7ABA78' }]}  
+              style={[styles.playButton, { backgroundColor: '#7ABA78' }]}
               onPress={() => setModalVisible(false)}
             >
               <Text style={styles.playButtonText}>Close</Text>
@@ -87,7 +101,7 @@ const MainPage = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -113,8 +127,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   slider: {
-    width: 300,
-    height: 80,
+    width: 200,
+    height: 40,
     marginBottom: 20,
   },
   playButton: {

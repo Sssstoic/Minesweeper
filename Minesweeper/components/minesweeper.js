@@ -226,7 +226,7 @@ const revealBombs = async (clickedRow, clickedCol) => {
       <Image source={require('../assets/flag.png')} style={styles.toolIcon} />
     </TouchableOpacity>
 
-     {/* Hints Container */}
+
      <View
           style={[
             styles.counterContainer,

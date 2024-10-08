@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
   const [gameLost, setGameLost] = useState(false);
+
+  const hapticOptions = {
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: false,
+    };
 
   const boardSize = 8;
   const bombCount = 10;
@@ -96,11 +102,10 @@ const Minesweeper = ({ route, navigation }) => {
 const revealBombs = async (clickedRow, clickedCol) => {
     for (let row = 0; row < boardSize; row++) {
         for (let col = 0; col < boardSize; col++) {
-            // Reveal every bomb except the one that was clicked
             if (board[row][col].hasBomb && !(row === clickedRow && col === clickedCol)) {
                 board[row][col].revealed = true;
-                setBoard([...board]);  // Update the board state after each reveal
-                await new Promise(resolve => setTimeout(resolve, 200));  // Delay between reveals
+                setBoard([...board]);  
+                await new Promise(resolve => setTimeout(resolve, 200));  
             }
         }
     }

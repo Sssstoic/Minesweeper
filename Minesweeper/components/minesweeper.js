@@ -125,12 +125,12 @@ const revealBombs = async (clickedRow, clickedCol) => {
         const newRow = row + dx;
         const newCol = col + dy;
         if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
-          revealCell(newRow, newCol);  // Recursion to open adjacent cells
+          revealCell(newRow, newCol);  
         }
       });
     }
 
-    setBoard([...board]);  // Trigger re-render
+    setBoard([...board]);  
   };
 
   const checkWin = () => {
@@ -204,7 +204,7 @@ const revealBombs = async (clickedRow, clickedCol) => {
       </View>
 
       <View style={styles.tools}>
-        <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
+        <Image source={require('../assets/bomb.png')} style={styles.bombIcon2} />
         <Text style={styles.bombCounter}>{flagsLeft}</Text>
         <TouchableOpacity
           onPress={() => setSelectedTool('shovel')}
@@ -303,6 +303,11 @@ const styles = StyleSheet.create({
   bombIcon: {
     width: 30,
     height: 30,
+  },
+  bombIcon2: {
+    width: 30,
+    height: 30,
+    marginLeft: 30
   },
   tools: {
     flexDirection: 'row',

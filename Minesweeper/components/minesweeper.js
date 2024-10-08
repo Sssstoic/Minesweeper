@@ -5,10 +5,9 @@ const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
   const [gameLost, setGameLost] = useState(false);
   
-
   const boardSize = 8;
   const bombCount = 10;
-  const hintCount = 3;
+  const hintCount = 2;
   const [board, setBoard] = useState([]);
   const [flagsLeft, setFlagsLeft] = useState(bombCount);
   const [hintsLeft, setHintsLeft] = useState(hintCount);

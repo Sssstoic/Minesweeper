@@ -98,17 +98,21 @@ const Minesweeper = ({ route, navigation }) => {
     }
 };
 
-// Function to reveal all bombs one by one
 const revealBombs = async (clickedRow, clickedCol) => {
-    for (let row = 0; row < boardSize; row++) {
-        for (let col = 0; col < boardSize; col++) {
-            if (board[row][col].hasBomb && !(row === clickedRow && col === clickedCol)) {
-                board[row][col].revealed = true;
-                setBoard([...board]);  
-                await new Promise(resolve => setTimeout(resolve, 200));  
-            }
-        }
-    }
+  for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+          if (board[row][col].hasBomb && !(row === clickedRow && col === clickedCol)) {
+              board[row][col].revealed = true;
+              setBoard([...board]);
+
+              // Trigger haptic feedback when a bomb is revealed
+              ReactNativeHapticFeedback.trigger('impactMedium', hapticOptions);
+
+              // Add delay before revealing the next bomb
+              await new Promise(resolve => setTimeout(resolve, 200));
+          }
+      }
+  }
     setGameOver(true);  // End the game after all bombs are revealed
 };
 

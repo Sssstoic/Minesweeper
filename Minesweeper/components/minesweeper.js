@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-na
 
 const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
+  const [gameLost, setGameLost] = useState(false);
 
   const boardSize = 8;
   const bombCount = 10;
@@ -63,27 +64,49 @@ const Minesweeper = ({ route, navigation }) => {
 
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed || board[row][col].flagged) return;
+
     if (selectedTool === 'shovel') {
-      if (board[row][col].hasBomb) {
-        setGameOver(true);
-        Alert.alert('Game Over', 'You clicked on a bomb!');
-      } else {
-        revealCell(row, col);
-        if (checkWin()) {
-          Alert.alert('Congratulations!', 'You won the game!');
+        if (board[row][col].hasBomb) {
+            // When the player hits a bomb, trigger the game lost state
+            board[row][col].revealed = true;  // Reveal the bomb they clicked
+            setBoard([...board]);
+            revealBombs(row, col);  // Call the function to reveal all bombs one by one
+            setGameLost(true);  // Mark game as lost
+        } else {
+            // If it's not a bomb, reveal the cell
+            revealCell(row, col);
+            if (checkWin()) {
+                Alert.alert('Congratulations!', 'You won the game!');
+            }
         }
-      }
     } else if (selectedTool === 'flag' && !board[row][col].revealed) {
-      if (board[row][col].flagged) {
-        board[row][col].flagged = false;
-        setFlagsLeft(flagsLeft + 1);
-      } else if (flagsLeft > 0) {
-        board[row][col].flagged = true;
-        setFlagsLeft(flagsLeft - 1);
-      }
-      setBoard([...board]);
+        // Handle flagging/unflagging logic
+        if (board[row][col].flagged) {
+            board[row][col].flagged = false;
+            setFlagsLeft(flagsLeft + 1);
+        } else if (flagsLeft > 0) {
+            board[row][col].flagged = true;
+            setFlagsLeft(flagsLeft - 1);
+        }
+        setBoard([...board]);
     }
-  };
+};
+
+// Function to reveal all bombs one by one
+const revealBombs = async (clickedRow, clickedCol) => {
+    for (let row = 0; row < boardSize; row++) {
+        for (let col = 0; col < boardSize; col++) {
+            // Reveal every bomb except the one that was clicked
+            if (board[row][col].hasBomb && !(row === clickedRow && col === clickedCol)) {
+                board[row][col].revealed = true;
+                setBoard([...board]);  // Update the board state after each reveal
+                await new Promise(resolve => setTimeout(resolve, 200));  // Delay between reveals
+            }
+        }
+    }
+    setGameOver(true);  // End the game after all bombs are revealed
+};
+
 
   // Updated revealCell function for first-time "explosion"
   const revealCell = (row, col) => {

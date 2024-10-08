@@ -204,27 +204,32 @@ const revealBombs = async (clickedRow, clickedCol) => {
       </View>
 
       <View style={styles.tools}>
-        <Image source={require('../assets/bomb.png')} style={styles.bombIcon2} />
+        <View style={styles.bombContainer}>
+        <Image source={require('../assets/bomb.png')} style={styles.toolIcon} />
         <Text style={styles.bombCounter}>{flagsLeft}</Text>
-        <TouchableOpacity
-          onPress={() => setSelectedTool('shovel')}
-          style={[styles.toolButton, selectedTool === 'shovel' && styles.selectedTool]}
+      </View>
+
+      <TouchableOpacity
+        onPress={() => setSelectedTool('shovel')}
+        style={[styles.toolButton, selectedTool === 'shovel' && styles.selectedTool]}
         >
-          <Image source={require('../assets/shovel.png')} style={styles.toolIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setSelectedTool('flag')}
-          style={[styles.toolButton, selectedTool === 'flag' && styles.selectedTool]}
-        >
-          <Image source={require('../assets/flag.png')} style={styles.toolIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={useHint}
-          style={[styles.hintButton, hintUsed && styles.disabledHint]}
-          disabled={hintUsed}
-        >
-          <Text>Hint</Text>
-        </TouchableOpacity>
+        <Image source={require('../assets/shovel.png')} style={styles.toolIcon} />
+      </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={() => setSelectedTool('flag')}
+      style={[styles.toolButton, selectedTool === 'flag' && styles.selectedTool]}
+    >
+      <Image source={require('../assets/flag.png')} style={styles.toolIcon} />
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={useHint}
+      style={[styles.toolButton, hintUsed && styles.disabledHint]}
+      disabled={hintUsed}
+    >
+    <Image source={require('../assets/hint.png')} style={styles.toolIcon} />
+    </TouchableOpacity>
       </View>
     </View>
   );
@@ -304,54 +309,53 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  bombIcon2: {
-    width: 30,
-    height: 30,
-    marginLeft: 30
-  },
+
   tools: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '90%',
-    paddingBottom: 20,
-    marginRight: 50,
+    paddingVertical: 15,
     borderWidth: 4,
     borderRadius: 8,
-    marginRight: 3,
-    marginTop: 80
-    
-
+    borderColor: '#fff',
+    marginTop: 50,
+    paddingHorizontal: 20,
   },
+
+  bombContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  bombCounter: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
+
   toolButton: {
     backgroundColor: '#666',
-    padding: 15,
+    padding: 12,
     borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
   toolIcon: {
     width: 40,
     height: 40,
   },
+
   selectedTool: {
     borderColor: '#78D172',
-    backgroundColor: "#7ABA78",
+    backgroundColor: '#7ABA78',
     borderWidth: 2,
   },
-  hintButton: {
-    backgroundColor: 'yellow',
-    padding: 10,
-    borderRadius: 5,
-    fontWeight: 'bold',
-  },
+
   disabledHint: {
     backgroundColor: 'gray',
   },
-  bombCounter: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginRight: 80
-  },
 });
-
 export default Minesweeper;

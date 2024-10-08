@@ -8,8 +8,10 @@ const Minesweeper = ({ route, navigation }) => {
 
   const boardSize = 8;
   const bombCount = 10;
+  const hintCount = 3;
   const [board, setBoard] = useState([]);
   const [flagsLeft, setFlagsLeft] = useState(bombCount);
+  const [hintsLeft, setHintsLeft] = useState(hintCount);
   const [gameOver, setGameOver] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [selectedTool, setSelectedTool] = useState('shovel');
@@ -34,6 +36,7 @@ const Minesweeper = ({ route, navigation }) => {
     calculateAdjacentBombs(newBoard);
     setBoard(newBoard);
     setFlagsLeft(bombCount);
+    setHintsLeft(hintCount);
     setGameOver(false);
     setHintUsed(false);
   };
@@ -145,20 +148,21 @@ const revealBombs = async (clickedRow, clickedCol) => {
   };
 
   const useHint = () => {
-    if (hintUsed) return;
+    if (hintsLeft === 0) return;
     let hintFound = false;
     for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col < boardSize; col++) {
+      for (let col = 0; col < boardSize; col++) {  // Corrected from colIndex to col
         if (!board[row][col].hasBomb && !board[row][col].revealed) {
           revealCell(row, col);
-          setHintUsed(true);
+          setHintsLeft(hintsLeft - 1);
           hintFound = true;
           break;
         }
       }
       if (hintFound) break;
     }
-  };
+};
+
 
   useEffect(() => {
     initializeBoard();
@@ -223,13 +227,18 @@ const revealBombs = async (clickedRow, clickedCol) => {
       <Image source={require('../assets/flag.png')} style={styles.toolIcon} />
     </TouchableOpacity>
 
-    <TouchableOpacity
-      onPress={useHint}
-      style={[styles.toolButton, hintUsed && styles.disabledHint]}
-      disabled={hintUsed}
-    >
-    <Image source={require('../assets/hint.png')} style={styles.toolIcon} />
-    </TouchableOpacity>
+     {/* Hints Container */}
+     <View
+          style={[
+            styles.counterContainer,
+            hintsLeft === 0 ? styles.disabledHintContainer : styles.hintContainer,
+          ]}
+        >
+          <TouchableOpacity onPress={useHint} disabled={hintsLeft === 0}>
+            <Image source={require('../assets/hint.png')} style={styles.toolIcon} />
+          </TouchableOpacity>
+          <Text style={styles.counterText}>{hintsLeft}</Text>
+        </View>
       </View>
     </View>
   );
@@ -354,8 +363,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
 
-  disabledHint: {
+  hintContainer: {
+    backgroundColor: 'yellow',
+    padding: 12,
+    borderRadius: 5,
+  },
+
+  disabledHintContainer: {
     backgroundColor: 'gray',
+    padding: 12,
+    borderRadius: 5,
   },
 });
 export default Minesweeper;

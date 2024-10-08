@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
 
 const Minesweeper = ({ route, navigation }) => {
-  const { difficulty } = route.params;  // Get difficulty passed from MainPage
+  const { difficulty } = route.params;
 
-  const boardSize = 8;  // Simple 8x8 board
-  const bombCount = 10; // 10 bombs
+  const boardSize = 8;
+  const bombCount = 10;
   const [board, setBoard] = useState([]);
   const [flagsLeft, setFlagsLeft] = useState(bombCount);
   const [gameOver, setGameOver] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
-  const [selectedTool, setSelectedTool] = useState('shovel'); // 'shovel' or 'flag'
+  const [selectedTool, setSelectedTool] = useState('shovel');
 
-  // Initialize board and bombs
   const initializeBoard = () => {
     let newBoard = Array(boardSize)
       .fill(null)
@@ -37,7 +36,6 @@ const Minesweeper = ({ route, navigation }) => {
     setHintUsed(false);
   };
 
-  // Calculate the number of bombs around each cell
   const calculateAdjacentBombs = (board) => {
     const directions = [
       [0, 1], [1, 1], [1, 0], [1, -1],
@@ -63,7 +61,6 @@ const Minesweeper = ({ route, navigation }) => {
     }
   };
 
-  // Handle clicking on a cell
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed || board[row][col].flagged) return;
     if (selectedTool === 'shovel') {
@@ -88,24 +85,29 @@ const Minesweeper = ({ route, navigation }) => {
     }
   };
 
-  // Reveal a cell and recursively reveal adjacent cells if no bombs nearby
+  // Updated revealCell function for first-time "explosion"
   const revealCell = (row, col) => {
     if (board[row][col].revealed || board[row][col].flagged) return;
+
     board[row][col].revealed = true;
-    setBoard([...board]);
+
     if (board[row][col].adjacentBombs === 0) {
       const directions = [
         [0, 1], [1, 1], [1, 0], [1, -1],
         [0, -1], [-1, -1], [-1, 0], [-1, 1],
       ];
+
+      // Recursively reveal nearby cells
       directions.forEach(([dx, dy]) => {
         const newRow = row + dx;
         const newCol = col + dy;
         if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
-          revealCell(newRow, newCol);
+          revealCell(newRow, newCol);  // Recursion to open adjacent cells
         }
       });
     }
+
+    setBoard([...board]);  // Trigger re-render
   };
 
   const checkWin = () => {
@@ -121,14 +123,17 @@ const Minesweeper = ({ route, navigation }) => {
 
   const useHint = () => {
     if (hintUsed) return;
+    let hintFound = false;
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
         if (!board[row][col].hasBomb && !board[row][col].revealed) {
           revealCell(row, col);
           setHintUsed(true);
+          hintFound = true;
           break;
         }
       }
+      if (hintFound) break;
     }
   };
 
@@ -138,7 +143,6 @@ const Minesweeper = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Top buttons */}
       <View style={styles.topButtons}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.topButton}>
           <Text style={styles.buttonText}>Back</Text>
@@ -148,7 +152,6 @@ const Minesweeper = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Game board */}
       <View style={styles.board}>
         {board.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
@@ -160,9 +163,14 @@ const Minesweeper = ({ route, navigation }) => {
                   styles.cell,
                   cell.revealed && styles.revealedCell,
                   cell.flagged && styles.flaggedCell,
+                  { borderWidth: 2, borderColor: '#666' }, // Adding border to each cell
                 ]}
               >
-                {cell.revealed && !cell.hasBomb && <Text>{cell.adjacentBombs || ''}</Text>}
+                {cell.revealed && !cell.hasBomb && (
+                  <Text style={[styles.cellText, getNumberColor(cell.adjacentBombs)]}>
+                    {cell.adjacentBombs || ''}
+                  </Text>
+                )}
                 {cell.revealed && cell.hasBomb && (
                   <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
                 )}
@@ -172,9 +180,9 @@ const Minesweeper = ({ route, navigation }) => {
         ))}
       </View>
 
-      {/* Bomb counter and tools */}
       <View style={styles.tools}>
-        <Text style={styles.bombCounter}>Bombs left: {flagsLeft}</Text>
+        <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
+        <Text style={styles.bombCounter}>{flagsLeft}</Text>
         <TouchableOpacity
           onPress={() => setSelectedTool('shovel')}
           style={[styles.toolButton, selectedTool === 'shovel' && styles.selectedTool]}
@@ -187,96 +195,128 @@ const Minesweeper = ({ route, navigation }) => {
         >
           <Image source={require('../assets/flag.png')} style={styles.toolIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={useHint} disabled={hintUsed}>
-          <Text style={[styles.hintButton, hintUsed && styles.disabledHint]}>Hint</Text>
+        <TouchableOpacity
+          onPress={useHint}
+          style={[styles.hintButton, hintUsed && styles.disabledHint]}
+          disabled={hintUsed}
+        >
+          <Text>Hint</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
+const getNumberColor = (num) => {
+  switch (num) {
+    case 1:
+      return { color: '#1230AE' }; 
+    case 2:
+      return { color: '#6A9C89' }; 
+    case 3:
+      return { color: '#A04747' }; 
+    case 4:
+      return { color: '#2E073F' }; 
+    case 5:
+      return { color: '#41B3A2' }; 
+    case 6:
+      return { color: '#FF8343' }; 
+    case 7:
+      return { color: '#17153B' }; 
+    case 8:
+      return { color: '#E4003A' }; 
+    default:
+      return {};
+  }
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#212121',
-    paddingTop: 40,
+    backgroundColor: '#333',
   },
   topButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '90%',
+    paddingBottom: 20,
   },
   topButton: {
-    backgroundColor: '#444',
+    backgroundColor: '#008CBA',
     padding: 10,
     borderRadius: 5,
   },
   buttonText: {
     color: '#fff',
+    fontWeight: 'bold',
   },
   board: {
     flexDirection: 'column',
+    justifyContent: 'center',
   },
   row: {
     flexDirection: 'row',
   },
   cell: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#333',
-    margin: 1,
+    width: 50,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8
   },
   revealedCell: {
-    backgroundColor: '#999',
+    backgroundColor: '#333',
   },
   flaggedCell: {
-    backgroundColor: '#f00',
+    backgroundColor: '#FF4500',
+  },
+  cellText: {
+    fontSize: 40,
+    fontWeight: 'bold',
   },
   bombIcon: {
-    width: 30,
-    height: 30,
+    width: 50,
+    height: 50,
   },
   tools: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#222',
-    padding: 10,
-    borderRadius: 10,
+    justifyContent: 'space-between',
     width: '90%',
-    marginBottom: 20,
+    paddingBottom: 20,
+    marginRight: 50,
+
+  },
+  toolButton: {
+    backgroundColor: '#666',
+    padding: 15,
+    borderRadius: 5,
+  },
+  toolIcon: {
+    width: 40,
+    height: 40,
+  },
+  selectedTool: {
+    borderColor: '#78D172',
+    backgroundColor: "#7ABA78",
+    borderWidth: 2,
+  },
+  hintButton: {
+    backgroundColor: 'yellow',
+    padding: 10,
+    borderRadius: 5,
+    fontWeight: 'bold',
+  },
+  disabledHint: {
+    backgroundColor: 'gray',
   },
   bombCounter: {
     color: '#fff',
-    marginRight: 20,
-  },
-  toolButton: {
-    marginHorizontal: 10,
-    padding: 10,
-    backgroundColor: '#444',
-    borderRadius: 50,
-  },
-  selectedTool: {
-    borderColor: 'green',
-    borderWidth: 2,
-  },
-  toolIcon: {
-    width: 30,
-    height: 30,
-  },
-  hintButton: {
-    marginLeft: 20,
-    color: '#fff',
-    backgroundColor: '#555',
-    padding: 10,
-    borderRadius: 5,
-  },
-  disabledHint: {
-    opacity: 0.3,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

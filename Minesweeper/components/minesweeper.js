@@ -316,6 +316,11 @@ const styles = StyleSheet.create({
     width: '90%',
     paddingBottom: 20,
     marginRight: 50,
+    borderWidth: 4,
+    borderRadius: 8,
+    marginRight: 3,
+    marginTop: 80
+    
 
   },
   toolButton: {
@@ -345,6 +350,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+    marginRight: 80
   },
 });
 

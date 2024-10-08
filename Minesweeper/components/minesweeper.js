@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 8
+    borderRadius: 8,
   },
   revealedCell: {
     backgroundColor: '#333',

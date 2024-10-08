@@ -210,19 +210,19 @@ const Minesweeper = ({ route, navigation }) => {
 const getNumberColor = (num) => {
   switch (num) {
     case 1:
-      return { color: '#1230AE' }; 
+      return { color: '#5AB2FF' }; 
     case 2:
-      return { color: '#6A9C89' }; 
+      return { color: '#ACD793' }; 
     case 3:
-      return { color: '#A04747' }; 
+      return { color: '#FA7070' }; 
     case 4:
-      return { color: '#2E073F' }; 
+      return { color: '#FF76CE' }; 
     case 5:
-      return { color: '#41B3A2' }; 
+      return { color: '#987D9A' }; 
     case 6:
       return { color: '#FF8343' }; 
     case 7:
-      return { color: '#17153B' }; 
+      return { color: '#FFDE4D' }; 
     case 8:
       return { color: '#E4003A' }; 
     default:

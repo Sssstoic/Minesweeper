@@ -177,7 +177,6 @@ const Minesweeper = ({ route, navigation }) => {
     initializeBoard();
   }, []);
 
-  // Render the game over screen
   const renderGameOverScreen = () => (
     <View style={styles.gameOverContainer}>
       <Text style={styles.gameOverText}>

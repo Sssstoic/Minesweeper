@@ -282,7 +282,6 @@ const Minesweeper = ({ route, navigation }) => {
   );
 };
 
-// Function to get color based on the number of adjacent bombs
 const getNumberColor = (num) => {
   switch (num) {
     case 1:

@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
   },
   flaggedCell: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#C62E2E',
   },
   cellText: {
     fontSize: 40,

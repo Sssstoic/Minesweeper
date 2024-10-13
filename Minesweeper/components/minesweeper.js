@@ -40,13 +40,17 @@ const Minesweeper = ({ route, navigation }) => {
     while (bombsPlaced < bombCount) {
       let row = Math.floor(Math.random() * boardSize);
       let col = Math.floor(Math.random() * boardSize);
-      if (!updatedBoard[row][col].hasBomb && (row !== firstRow || col !== firstCol)) {
+      if (!updatedBoard[row][col].hasBomb && !isAdjacentToFirstClick(row, col, firstRow, firstCol)) {
         updatedBoard[row][col].hasBomb = true;
         bombsPlaced++;
       }
     }
     calculateAdjacentBombs(updatedBoard);
     setBoard(updatedBoard);
+  };
+
+  const isAdjacentToFirstClick = (row, col, firstRow, firstCol) => {
+    return Math.abs(row - firstRow) <= 1 && Math.abs(col - firstCol) <= 1;
   };
 
   const calculateAdjacentBombs = (board) => {

@@ -29,7 +29,7 @@ const Minesweeper = ({ route, navigation }) => {
   const [isFirstMove, setIsFirstMove] = useState(true);
   const [allBombsRevealed, setAllBombsRevealed] = useState(false);
 
-   const initializeBoard = () => {
+  const initializeBoard = () => {
     let newBoard = Array(boardSize)
       .fill(null)
       .map(() =>
@@ -51,7 +51,7 @@ const Minesweeper = ({ route, navigation }) => {
     const updatedBoard = [...board];
     while (bombsPlaced < bombCount) {
       let row = Math.floor(Math.random() * boardSize);
-      let col = Math.floor(Math.random() * boardSize);
+      let col = Math.floor(Math.random() * 8); 
       if (!updatedBoard[row][col].hasBomb && !isAdjacentToFirstClick(row, col, firstRow, firstCol)) {
         updatedBoard[row][col].hasBomb = true;
         bombsPlaced++;

@@ -28,11 +28,12 @@ const Minesweeper = ({ route, navigation }) => {
   const [selectedTool, setSelectedTool] = useState('shovel');
   const [isFirstMove, setIsFirstMove] = useState(true);
   const [allBombsRevealed, setAllBombsRevealed] = useState(false);
-  const initializeBoard = () => {
+
+   const initializeBoard = () => {
     let newBoard = Array(boardSize)
       .fill(null)
       .map(() =>
-        Array(boardSize)
+        Array(8) 
           .fill(null)
           .map(() => ({ revealed: false, hasBomb: false, flagged: false, adjacentBombs: 0 }))
       );

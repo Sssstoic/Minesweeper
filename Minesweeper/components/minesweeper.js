@@ -4,9 +4,21 @@ import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-na
 const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
   const [gameLost, setGameLost] = useState(false);
+
+  const getBoardConfig = (diff) => {
+    switch(diff) {
+      case 1: // Easy
+        return { boardSize: 8, bombCount: 8 };
+      case 2: // Medium
+        return { boardSize: 10, bombCount: 15 };
+      case 3: // Hard
+        return { boardSize: 12, bombCount: 27 };
+      default:
+        return { boardSize: 8, bombCount: 8 };
+    }
+  };
   
-  const boardSize = 8;
-  const bombCount = 10;
+  const { boardSize, bombCount } = getBoardConfig(difficulty);
   const hintCount = 2;
   const [board, setBoard] = useState([]);
   const [flagsLeft, setFlagsLeft] = useState(bombCount);
@@ -16,7 +28,6 @@ const Minesweeper = ({ route, navigation }) => {
   const [selectedTool, setSelectedTool] = useState('shovel');
   const [isFirstMove, setIsFirstMove] = useState(true);
   const [allBombsRevealed, setAllBombsRevealed] = useState(false);
-
   const initializeBoard = () => {
     let newBoard = Array(boardSize)
       .fill(null)
@@ -197,7 +208,7 @@ const Minesweeper = ({ route, navigation }) => {
       <TouchableOpacity onPress={initializeBoard} style={styles.retryButton}>
         <Text style={styles.buttonText}>Retry</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('MainMenu')} style={styles.mainMenuButton}>
+      <TouchableOpacity onPress={() => navigation.navigate('MainPage')} style={styles.mainMenuButton}>
         <Text style={styles.buttonText}>Return to Main Menu</Text>
       </TouchableOpacity>
     </View>

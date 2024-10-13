@@ -43,7 +43,7 @@ const Minesweeper = ({ route, navigation }) => {
     setGameOver(false);
     setIsGameWon(false);
     setIsFirstMove(true);
-    setAllBombsRevealed(false);
+    setAllBombsRevealed(false); 
   };
 
   const placeBombs = (firstRow, firstCol) => {
@@ -92,20 +92,20 @@ const Minesweeper = ({ route, navigation }) => {
 
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;
-
+  
     if (isFirstMove) {
       placeBombs(row, col);
       setIsFirstMove(false);
     }
-
+  
     const updatedBoard = [...board];
     const cell = updatedBoard[row][col];
-
+  
     if (selectedTool === 'shovel') {
       if (cell.hasBomb) {
         cell.revealed = true;
         setBoard(updatedBoard);
-        revealBombs();
+        revealBombs(); 
         setGameOver(true);
         setGameLost(true);
       } else {

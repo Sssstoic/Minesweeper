@@ -227,34 +227,35 @@ const Minesweeper = ({ route, navigation }) => {
       </View>
 
       <View style={styles.board}>
-        {board.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.row}>
-            {row.map((cell, colIndex) => (
-              <TouchableOpacity
-                key={colIndex}
-                onPress={() => handleCellPress(rowIndex, colIndex)}
-                style={[
-                  styles.cell,
-                  cell.revealed && styles.revealedCell,
-                  { borderWidth: 3, borderColor: '#333' }, 
-                ]}
-              >
-                {cell.flagged && !cell.revealed && (
-                  <Image source={require('../assets/flag.png')} style={styles.flagIcon} />
-                )}
-                {cell.revealed && !cell.hasBomb && (
-                  <Text style={[styles.cellText, getNumberColor(cell.adjacentBombs)]}>
-                    {cell.adjacentBombs || ''}
-                  </Text>
-                )}
-                {cell.revealed && cell.hasBomb && (
-                  <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
-                )}
-              </TouchableOpacity>
-            ))}
-          </View>
-        ))}
-      </View>
+  {board.map((row, rowIndex) => (
+    <View key={rowIndex} style={styles.row}>
+      {row.map((cell, colIndex) => (
+        <TouchableOpacity
+          key={colIndex}
+          onPress={() => handleCellPress(rowIndex, colIndex)}
+          style={[
+            styles.cell,
+            cell.revealed && styles.revealedCell,
+            { borderWidth: 3, borderColor: '#333' },
+            { width: 320 / 8, height: 320 / 8 } // Adjust cell size based on screen width
+          ]}
+        >
+          {cell.flagged && !cell.revealed && (
+            <Image source={require('../assets/flag.png')} style={styles.flagIcon} />
+          )}
+          {cell.revealed && !cell.hasBomb && (
+            <Text style={[styles.cellText, getNumberColor(cell.adjacentBombs)]}>
+              {cell.adjacentBombs || ''}
+            </Text>
+          )}
+          {cell.revealed && cell.hasBomb && (
+            <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
+          )}
+        </TouchableOpacity>
+      ))}
+    </View>
+  ))}
+</View>
 
       <View style={styles.tools}>
         <View style={styles.bombContainer}>

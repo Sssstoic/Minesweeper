@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
 
 const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
   const [gameLost, setGameLost] = useState(false);
 
+  // Define the board size and bomb count based on the difficulty
   const getBoardConfig = (diff) => {
-    switch(diff) {
+    switch (diff) {
       case 1: // Easy
         return { boardSize: 10, bombCount: 8 };
       case 2: // Medium
@@ -17,7 +18,7 @@ const Minesweeper = ({ route, navigation }) => {
         return { boardSize: 8, bombCount: 8 };
     }
   };
-  
+
   const { boardSize, bombCount } = getBoardConfig(difficulty);
   const hintCount = 2;
   const [board, setBoard] = useState([]);
@@ -29,13 +30,17 @@ const Minesweeper = ({ route, navigation }) => {
   const [isFirstMove, setIsFirstMove] = useState(true);
   const [allBombsRevealed, setAllBombsRevealed] = useState(false);
 
+  // Initialize the board (empty cells at first)
   const initializeBoard = () => {
     let newBoard = Array(boardSize)
       .fill(null)
       .map(() =>
-        Array(boardSize)
-          .fill(null)
-          .map(() => ({ revealed: false, hasBomb: false, flagged: false, adjacentBombs: 0 }))
+        Array(boardSize).fill(null).map(() => ({
+          revealed: false,
+          hasBomb: false,
+          flagged: false,
+          adjacentBombs: 0
+        }))
       );
     setBoard(newBoard);
     setFlagsLeft(bombCount);
@@ -46,12 +51,15 @@ const Minesweeper = ({ route, navigation }) => {
     setAllBombsRevealed(false);
   };
 
+  // Place bombs, ensuring no bomb is near the first click (1-cell buffer)
   const placeBombs = (firstRow, firstCol) => {
     let bombsPlaced = 0;
     const updatedBoard = [...board];
+
     while (bombsPlaced < bombCount) {
       let row = Math.floor(Math.random() * boardSize);
       let col = Math.floor(Math.random() * boardSize);
+      // Ensure bombs aren't placed on the first-clicked cell or adjacent cells
       if (!updatedBoard[row][col].hasBomb && !isAdjacentToFirstClick(row, col, firstRow, firstCol)) {
         updatedBoard[row][col].hasBomb = true;
         bombsPlaced++;
@@ -61,15 +69,20 @@ const Minesweeper = ({ route, navigation }) => {
     setBoard(updatedBoard);
   };
 
+  // Adjust this function if you want to make the first reveal smaller
   const isAdjacentToFirstClick = (row, col, firstRow, firstCol) => {
+    // Currently, it checks a 3x3 area (row -1 to +1, col -1 to +1)
+    // To make the first reveal smaller, change this logic to reduce the checked area
     return Math.abs(row - firstRow) <= 1 && Math.abs(col - firstCol) <= 1;
   };
 
+  // Calculate the number of bombs adjacent to each cell
   const calculateAdjacentBombs = (board) => {
     const directions = [
       [0, 1], [1, 1], [1, 0], [1, -1],
       [0, -1], [-1, -1], [-1, 0], [-1, 1],
     ];
+
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
         if (board[row][col].hasBomb) continue;
@@ -90,25 +103,29 @@ const Minesweeper = ({ route, navigation }) => {
     }
   };
 
+  // Handle cell click, first move reveals safe area
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;
-  
+
     if (isFirstMove) {
+      // On first move, place bombs and ensure the area clicked is safe
       placeBombs(row, col);
       setIsFirstMove(false);
     }
-  
+
     const updatedBoard = [...board];
     const cell = updatedBoard[row][col];
-  
+
     if (selectedTool === 'shovel') {
       if (cell.hasBomb) {
+        // Bomb clicked, game over
         cell.revealed = true;
         setBoard(updatedBoard);
         revealBombs(); 
         setGameOver(true);
         setGameLost(true);
       } else {
+        // Safe cell, reveal adjacent area (modify reveal size in revealCell function)
         revealCell(row, col, updatedBoard);
         if (checkWin(updatedBoard)) {
           setIsGameWon(true);
@@ -116,6 +133,7 @@ const Minesweeper = ({ route, navigation }) => {
         }
       }
     } else if (selectedTool === 'flag') {
+      // Place or remove a flag
       if (cell.flagged) {
         cell.flagged = false;
         setFlagsLeft(flagsLeft + 1);
@@ -127,6 +145,7 @@ const Minesweeper = ({ route, navigation }) => {
     }
   };
 
+  // Reveal bombs when game over
   const revealBombs = async () => {
     const updatedBoard = [...board];
     for (let row = 0; row < boardSize; row++) {
@@ -134,28 +153,30 @@ const Minesweeper = ({ route, navigation }) => {
         if (updatedBoard[row][col].hasBomb) {
           updatedBoard[row][col].revealed = true;
           setBoard([...updatedBoard]);
-          await new Promise(resolve => setTimeout(resolve, 200));
+          await new Promise(resolve => setTimeout(resolve, 200)); // Add delay for bomb reveal effect
         }
       }
     }
     setAllBombsRevealed(true);
   };
 
+  // Reveal the clicked cell and surrounding area if no adjacent bombs
   const revealCell = (row, col, updatedBoard) => {
-    if (row < 0|| row >= boardSize || col < 0 || col >= boardSize) return;
+    if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
 
     const cell = updatedBoard[row][col];
-    
+
     if (cell.revealed || cell.flagged) return;
 
     cell.revealed = true;
 
+    // Modify this part to control how large the revealed area is after the first click
     if (cell.adjacentBombs === 0) {
       const directions = [
         [0, 1], [1, 1], [1, 0], [1, -1],
         [0, -1], [-1, -1], [-1, 0], [-1, 1],
       ];
-
+      
       directions.forEach(([dx, dy]) => {
         const newRow = row + dx;
         const newCol = col + dy;
@@ -163,14 +184,15 @@ const Minesweeper = ({ route, navigation }) => {
           revealCell(newRow, newCol, updatedBoard);
         }
       });
-};
+    }
 
     setBoard([...updatedBoard]);
   };
 
+  // Check if player has won the game
   const checkWin = (updatedBoard) => {
     for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col < 8; col++) {
+      for (let col = 0; col < boardSize; col++) {
         if (!updatedBoard[row][col].hasBomb && !updatedBoard[row][col].revealed) {
           return false;
         }

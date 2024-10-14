@@ -51,7 +51,7 @@ const Minesweeper = ({ route, navigation }) => {
     const updatedBoard = [...board];
     while (bombsPlaced < bombCount) {
       let row = Math.floor(Math.random() * boardSize);
-      let col = Math.floor(Math.random() * 8); 
+      let col = Math.floor(Math.random() * boardSize);
       if (!updatedBoard[row][col].hasBomb && !isAdjacentToFirstClick(row, col, firstRow, firstCol)) {
         updatedBoard[row][col].hasBomb = true;
         bombsPlaced++;

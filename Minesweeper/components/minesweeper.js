@@ -142,30 +142,31 @@ const Minesweeper = ({ route, navigation }) => {
   };
 
   const revealCell = (row, col, updatedBoard) => {
-  if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
+    if (row < 0|| row >= boardSize || col < 0 || col >= boardSize) return;
 
-  const cell = updatedBoard[row][col];
-  if (cell.revealed || cell.flagged) return;
+    const cell = updatedBoard[row][col];
+    
+    if (cell.revealed || cell.flagged) return;
 
-  cell.revealed = true;
+    cell.revealed = true;
 
-  if (cell.adjacentBombs === 0) {
-    const directions = [
-      [0, 1], [1, 1], [1, 0], [1, -1],
-      [0, -1], [-1, -1], [-1, 0], [-1, 1],
-    ];
+    if (cell.adjacentBombs === 0) {
+      const directions = [
+        [0, 1], [1, 1], [1, 0], [1, -1],
+        [0, -1], [-1, -1], [-1, 0], [-1, 1],
+      ];
 
-    directions.forEach(([dx, dy]) => {
-      const newRow = row + dx;
-      const newCol = col + dy;
-      if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
-        revealCell(newRow, newCol, updatedBoard);
-      }
-    });
-  }
-
-  setBoard([...updatedBoard]);
+      directions.forEach(([dx, dy]) => {
+        const newRow = row + dx;
+        const newCol = col + dy;
+        if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
+          revealCell(newRow, newCol, updatedBoard);
+        }
+      });
 };
+
+    setBoard([...updatedBoard]);
+  };
 
   const checkWin = (updatedBoard) => {
     for (let row = 0; row < boardSize; row++) {

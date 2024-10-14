@@ -142,7 +142,6 @@ const Minesweeper = ({ route, navigation }) => {
   };
 
   const revealCell = (row, col, updatedBoard) => {
-    // Add boundary checks at the start to ensure row and col are valid
     if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
 
     const cell = updatedBoard[row][col];

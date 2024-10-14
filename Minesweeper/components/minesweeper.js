@@ -71,7 +71,7 @@ const Minesweeper = ({ route, navigation }) => {
       [0, -1], [-1, -1], [-1, 0], [-1, 1],
     ];
     for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col < 8; col++) { 
+      for (let col = 0; col < boardSize; col++) {
         if (board[row][col].hasBomb) continue;
         let adjacentBombs = 0;
         directions.forEach(([dx, dy]) => {
@@ -79,8 +79,8 @@ const Minesweeper = ({ route, navigation }) => {
           const newCol = col + dy;
           if (
             newRow >= 0 && newRow < boardSize &&
-            newCol >= 0 && newCol < 8 && 
-            board[newRow] && board[newRow][newCol] && board[newRow][newCol].hasBomb
+            newCol >= 0 && newCol < boardSize &&
+            board[newRow][newCol].hasBomb
           ) {
             adjacentBombs++;
           }

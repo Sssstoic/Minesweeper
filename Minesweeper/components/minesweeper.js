@@ -239,7 +239,7 @@ const Minesweeper = ({ route, navigation }) => {
             styles.cell,
             cell.revealed && styles.revealedCell,
             { borderWidth: 3, borderColor: '#333' },
-            { width: 320 / boardSize, height: 320 / boardSize }
+            { width: 360 / boardSize, height: 360 / boardSize }
           ]}
         >
           {cell.flagged && !cell.revealed && (

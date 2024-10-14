@@ -33,7 +33,7 @@ const Minesweeper = ({ route, navigation }) => {
     let newBoard = Array(boardSize)
       .fill(null)
       .map(() =>
-        Array(8) 
+        Array(boardSize)
           .fill(null)
           .map(() => ({ revealed: false, hasBomb: false, flagged: false, adjacentBombs: 0 }))
       );
@@ -43,7 +43,7 @@ const Minesweeper = ({ route, navigation }) => {
     setGameOver(false);
     setIsGameWon(false);
     setIsFirstMove(true);
-    setAllBombsRevealed(false); 
+    setAllBombsRevealed(false);
   };
 
   const placeBombs = (firstRow, firstCol) => {

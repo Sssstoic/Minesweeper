@@ -93,23 +93,22 @@ const Minesweeper = ({ route, navigation }) => {
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;
   
-    if (isFirstMove) {
-      placeBombs(row, col);
-      setIsFirstMove(false);
-    }
-  
     const updatedBoard = [...board];
     const cell = updatedBoard[row][col];
   
-    if (selectedTool === 'shovel') {
+    if (isFirstMove) {
+      placeBombs(row, col);
+      revealCell(row, col, updatedBoard, true); 
+      setIsFirstMove(false);
+    } else if (selectedTool === 'shovel') {
       if (cell.hasBomb) {
         cell.revealed = true;
         setBoard(updatedBoard);
-        revealBombs(); 
+        revealBombs();
         setGameOver(true);
         setGameLost(true);
       } else {
-        revealCell(row, col, updatedBoard);
+        revealCell(row, col, updatedBoard, false);
         if (checkWin(updatedBoard)) {
           setIsGameWon(true);
           setGameOver(true);
@@ -141,7 +140,7 @@ const Minesweeper = ({ route, navigation }) => {
     setAllBombsRevealed(true);
   };
 
-  const revealCell = (row, col, updatedBoard) => {
+  const revealCell = (row, col, updatedBoard, isFirstClick = false) => {
     if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
   
     const cell = updatedBoard[row][col];
@@ -149,7 +148,7 @@ const Minesweeper = ({ route, navigation }) => {
   
     cell.revealed = true;
   
-    if (cell.adjacentBombs === 0) {
+    if (cell.adjacentBombs === 0 || isFirstClick) {
       const directions = [
         [0, 1], [1, 1], [1, 0], [1, -1],
         [0, -1], [-1, -1], [-1, 0], [-1, 1],
@@ -159,14 +158,18 @@ const Minesweeper = ({ route, navigation }) => {
         const newRow = row + dx;
         const newCol = col + dy;
         if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
-          revealCell(newRow, newCol, updatedBoard);
+          if (isFirstClick) {
+            // For the first click, only reveal immediate neighbors
+            updatedBoard[newRow][newCol].revealed = true;
+          } else if (cell.adjacentBombs === 0) {
+            // For subsequent zero cells, continue revealing
+            revealCell(newRow, newCol, updatedBoard, false);
+          }
         }
       });
     }
-  
-    setBoard([...updatedBoard]);
   };
-
+  
   const checkWin = (updatedBoard) => {
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
@@ -240,8 +243,8 @@ const Minesweeper = ({ route, navigation }) => {
             cell.revealed && styles.revealedCell,
             { borderWidth: 3, borderColor: '#333' },
             { width: 360 / boardSize, height: 360 / boardSize }
-          ]}
-        >
+          ]}>
+
           {cell.flagged && !cell.revealed && (
             <Image source={require('../assets/flag.png')} style={styles.flagIcon} />
           )}

@@ -93,22 +93,23 @@ const Minesweeper = ({ route, navigation }) => {
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;
   
+    if (isFirstMove) {
+      placeBombs(row, col);
+      setIsFirstMove(false);
+    }
+  
     const updatedBoard = [...board];
     const cell = updatedBoard[row][col];
   
-    if (isFirstMove) {
-      placeBombs(row, col);
-      revealCell(row, col, updatedBoard, true); 
-      setIsFirstMove(false);
-    } else if (selectedTool === 'shovel') {
+    if (selectedTool === 'shovel') {
       if (cell.hasBomb) {
         cell.revealed = true;
         setBoard(updatedBoard);
-        revealBombs();
+        revealBombs(); 
         setGameOver(true);
         setGameLost(true);
       } else {
-        revealCell(row, col, updatedBoard, false);
+        revealCell(row, col, updatedBoard);
         if (checkWin(updatedBoard)) {
           setIsGameWon(true);
           setGameOver(true);
@@ -140,39 +141,35 @@ const Minesweeper = ({ route, navigation }) => {
     setAllBombsRevealed(true);
   };
 
-  const revealCell = (row, col, updatedBoard, isFirstClick = false) => {
-    if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
-  
-    const cell = updatedBoard[row][col];
-    if (cell.revealed || cell.flagged) return;
-  
-    cell.revealed = true;
-  
-    if (cell.adjacentBombs === 0 || isFirstClick) {
-      const directions = [
-        [0, 1], [1, 1], [1, 0], [1, -1],
-        [0, -1], [-1, -1], [-1, 0], [-1, 1],
-      ];
-  
-      directions.forEach(([dx, dy]) => {
-        const newRow = row + dx;
-        const newCol = col + dy;
-        if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
-          if (isFirstClick) {
-            // For the first click, only reveal immediate neighbors
-            updatedBoard[newRow][newCol].revealed = true;
-          } else if (cell.adjacentBombs === 0) {
-            // For subsequent zero cells, continue revealing
-            revealCell(newRow, newCol, updatedBoard, false);
-          }
-        }
-      });
-    }
-  };
-  
+  const revealCell = (row, col, updatedBoard) => {
+  if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
+
+  const cell = updatedBoard[row][col];
+  if (cell.revealed || cell.flagged) return;
+
+  cell.revealed = true;
+
+  if (cell.adjacentBombs === 0) {
+    const directions = [
+      [0, 1], [1, 1], [1, 0], [1, -1],
+      [0, -1], [-1, -1], [-1, 0], [-1, 1],
+    ];
+
+    directions.forEach(([dx, dy]) => {
+      const newRow = row + dx;
+      const newCol = col + dy;
+      if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
+        revealCell(newRow, newCol, updatedBoard);
+      }
+    });
+  }
+
+  setBoard([...updatedBoard]);
+};
+
   const checkWin = (updatedBoard) => {
     for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col < boardSize; col++) {
+      for (let col = 0; col < 8; col++) {
         if (!updatedBoard[row][col].hasBomb && !updatedBoard[row][col].revealed) {
           return false;
         }
@@ -242,9 +239,9 @@ const Minesweeper = ({ route, navigation }) => {
             styles.cell,
             cell.revealed && styles.revealedCell,
             { borderWidth: 3, borderColor: '#333' },
-            { width: 360 / boardSize, height: 360 / boardSize }
-          ]}>
-
+            { width: 320 / 8, height: 320 / 8 } // Adjust cell size based on screen width
+          ]}
+        >
           {cell.flagged && !cell.revealed && (
             <Image source={require('../assets/flag.png')} style={styles.flagIcon} />
           )}

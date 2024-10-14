@@ -80,7 +80,7 @@ const Minesweeper = ({ route, navigation }) => {
           if (
             newRow >= 0 && newRow < boardSize &&
             newCol >= 0 && newCol < 8 && 
-            board[newRow][newCol].hasBomb
+            board[newRow] && board[newRow][newCol] && board[newRow][newCol].hasBomb
           ) {
             adjacentBombs++;
           }

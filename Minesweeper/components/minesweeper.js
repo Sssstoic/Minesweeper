@@ -169,7 +169,7 @@ const Minesweeper = ({ route, navigation }) => {
 
   const checkWin = (updatedBoard) => {
     for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col < 8; col++) {
+      for (let col = 0; col < boardSize; col++) {
         if (!updatedBoard[row][col].hasBomb && !updatedBoard[row][col].revealed) {
           return false;
         }

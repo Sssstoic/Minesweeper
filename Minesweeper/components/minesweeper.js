@@ -106,7 +106,6 @@ const calculateAdjacentBombs = (board) => {
   }
 };
 
-
   // Handle cell click, first move reveals safe area
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;

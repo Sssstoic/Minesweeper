@@ -142,7 +142,11 @@ const Minesweeper = ({ route, navigation }) => {
   };
 
   const revealCell = (row, col, updatedBoard) => {
+    // Add boundary checks at the start to ensure row and col are valid
+    if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
+
     const cell = updatedBoard[row][col];
+    
     if (cell.revealed || cell.flagged) return;
 
     cell.revealed = true;
@@ -160,7 +164,8 @@ const Minesweeper = ({ route, navigation }) => {
           revealCell(newRow, newCol, updatedBoard);
         }
       });
-    }
+};
+
 
     setBoard([...updatedBoard]);
   };
@@ -352,7 +357,7 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   revealedCell: {
-    backgroundColor: '#333',
+    backgroundColor: '#888',
   },
   cellText: {
     fontSize: 20,

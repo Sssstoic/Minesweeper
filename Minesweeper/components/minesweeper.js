@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
@@ -70,38 +71,41 @@ const Minesweeper = ({ route, navigation }) => {
   };
 
   // Adjust this function if you want to make the first reveal smaller
-  const isAdjacentToFirstClick = (row, col, firstRow, firstCol) => {
-    // Currently, it checks a 3x3 area (row -1 to +1, col -1 to +1)
-    // To make the first reveal smaller, change this logic to reduce the checked area
-    return Math.abs(row - firstRow) <= 1 && Math.abs(col - firstCol) <= 1;
-  };
+const isAdjacentToFirstClick = (row, col, firstRow, firstCol, radius = 0) => {
+  // Adjust the radius to control the size of the first reveal area
+  // radius = 0 -> only reveal the clicked cell
+  // radius = 1 -> reveal the 3x3 area (current behavior)
+  // You can modify the radius to your needs
+  return Math.abs(row - firstRow) <= radius && Math.abs(col - firstCol) <= radius;
+};
 
-  // Calculate the number of bombs adjacent to each cell
-  const calculateAdjacentBombs = (board) => {
-    const directions = [
-      [0, 1], [1, 1], [1, 0], [1, -1],
-      [0, -1], [-1, -1], [-1, 0], [-1, 1],
-    ];
+// Calculate the number of bombs adjacent to each cell
+const calculateAdjacentBombs = (board) => {
+  const directions = [
+    [0, 1], [1, 1], [1, 0], [1, -1],
+    [0, -1], [-1, -1], [-1, 0], [-1, 1],
+  ];
 
-    for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col < boardSize; col++) {
-        if (board[row][col].hasBomb) continue;
-        let adjacentBombs = 0;
-        directions.forEach(([dx, dy]) => {
-          const newRow = row + dx;
-          const newCol = col + dy;
-          if (
-            newRow >= 0 && newRow < boardSize &&
-            newCol >= 0 && newCol < boardSize &&
-            board[newRow][newCol].hasBomb
-          ) {
-            adjacentBombs++;
-          }
-        });
-        board[row][col].adjacentBombs = adjacentBombs;
-      }
+  for (let row = 0; row < boardSize; row++) {
+    for (let col = 0; col < boardSize; col++) {
+      if (board[row][col].hasBomb) continue;
+      let adjacentBombs = 0;
+      directions.forEach(([dx, dy]) => {
+        const newRow = row + dx;
+        const newCol = col + dy;
+        if (
+          newRow >= 0 && newRow < boardSize &&
+          newCol >= 0 && newCol < boardSize &&
+          board[newRow][newCol].hasBomb
+        ) {
+          adjacentBombs++;
+        }
+      });
+      board[row][col].adjacentBombs = adjacentBombs;
     }
-  };
+  }
+};
+
 
   // Handle cell click, first move reveals safe area
   const handleCellPress = (row, col) => {

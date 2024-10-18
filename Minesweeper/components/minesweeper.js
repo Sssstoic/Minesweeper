@@ -6,7 +6,6 @@ const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
   const [gameLost, setGameLost] = useState(false);
 
-  // Define the board size and bomb count based on the difficulty
   const getBoardConfig = (diff) => {
     switch (diff) {
       case 1: // Easy
@@ -31,7 +30,6 @@ const Minesweeper = ({ route, navigation }) => {
   const [isFirstMove, setIsFirstMove] = useState(true);
   const [allBombsRevealed, setAllBombsRevealed] = useState(false);
 
-  // Initialize the board (empty cells at first)
   const initializeBoard = () => {
     let newBoard = Array(boardSize)
       .fill(null)
@@ -70,7 +68,6 @@ const Minesweeper = ({ route, navigation }) => {
     setBoard(updatedBoard);
   };
 
-  // Adjust this function if you want to make the first reveal smaller
 const isAdjacentToFirstClick = (row, col, firstRow, firstCol, radius = 0) => {
   // Adjust the radius to control the size of the first reveal area
   // radius = 0 -> only reveal the clicked cell
@@ -106,12 +103,10 @@ const calculateAdjacentBombs = (board) => {
   }
 };
 
-  // Handle cell click, first move reveals safe area
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;
 
     if (isFirstMove) {
-      // On first move, place bombs and ensure the area clicked is safe
       placeBombs(row, col);
       setIsFirstMove(false);
     }
@@ -121,14 +116,12 @@ const calculateAdjacentBombs = (board) => {
 
     if (selectedTool === 'shovel') {
       if (cell.hasBomb) {
-        // Bomb clicked, game over
         cell.revealed = true;
         setBoard(updatedBoard);
         revealBombs(); 
         setGameOver(true);
         setGameLost(true);
       } else {
-        // Safe cell, reveal adjacent area (modify reveal size in revealCell function)
         revealCell(row, col, updatedBoard);
         if (checkWin(updatedBoard)) {
           setIsGameWon(true);
@@ -136,7 +129,6 @@ const calculateAdjacentBombs = (board) => {
         }
       }
     } else if (selectedTool === 'flag') {
-      // Place or remove a flag
       if (cell.flagged) {
         cell.flagged = false;
         setFlagsLeft(flagsLeft + 1);
@@ -148,7 +140,6 @@ const calculateAdjacentBombs = (board) => {
     }
   };
 
-  // Reveal bombs when game over
   const revealBombs = async () => {
     const updatedBoard = [...board];
     for (let row = 0; row < boardSize; row++) {
@@ -156,14 +147,13 @@ const calculateAdjacentBombs = (board) => {
         if (updatedBoard[row][col].hasBomb) {
           updatedBoard[row][col].revealed = true;
           setBoard([...updatedBoard]);
-          await new Promise(resolve => setTimeout(resolve, 200)); // Add delay for bomb reveal effect
+          await new Promise(resolve => setTimeout(resolve, 200)); 
         }
       }
     }
     setAllBombsRevealed(true);
   };
 
-  // Reveal the clicked cell and surrounding area if no adjacent bombs
   const revealCell = (row, col, updatedBoard) => {
     if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
 
@@ -265,7 +255,7 @@ const calculateAdjacentBombs = (board) => {
             styles.cell,
             cell.revealed && styles.revealedCell,
             { borderWidth: 3, borderColor: '#333' },
-            { width: 320 / 8, height: 320 / 8 } // Adjust cell size based on screen width
+            { width: 320 / 8, height: 320 / 8 } 
           ]}
         >
           {cell.flagged && !cell.revealed && (

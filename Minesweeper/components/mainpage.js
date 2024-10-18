@@ -21,12 +21,10 @@ const MainPage = ({ navigation }) => {
 
   const handlePlayPress = () => {
     console.log('Game started at difficulty:', getDifficultyText(difficulty));
-    // Navigate to the Minesweeper screen with difficulty
     navigation.navigate('Minesweeper', { difficulty });
   };
 
   const handleSlidingComplete = (value) => {
-    // Snap the value to 1, 2, or 3 based on the closest point
     if (value < 1.5) {
       setDifficulty(1);  // Easy
     } else if (value < 2.5) {

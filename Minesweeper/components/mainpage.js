@@ -160,7 +160,9 @@ const styles = StyleSheet.create({
   helpButtonText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#fff',
   },
   modalContainer: {
     flex: 1,

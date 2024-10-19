@@ -70,6 +70,13 @@ const MainPage = ({ navigation }) => {
         <Text style={styles.helpButtonText}>?</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+        style={styles.settingsButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.settingsButtonText}>!</Text>
+      </TouchableOpacity>
+
       <Modal
         animationType="slide"
         transparent={true}

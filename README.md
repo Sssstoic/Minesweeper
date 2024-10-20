@@ -7,3 +7,6 @@
       Clear the board to win. Good luck!
 
 This project is made for Mobile Application Development Assignment
+
+Goals:
+

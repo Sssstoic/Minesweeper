@@ -8,5 +8,6 @@
 
 This project is made for Mobile Application Development Assignment
 
-Goals:
+## Goals:
+Make a functional Minesweeper Game
 

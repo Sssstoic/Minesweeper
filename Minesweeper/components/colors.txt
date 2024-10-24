@@ -4,6 +4,7 @@ Green:
 #78D172
 #7ABA78
 #ACD793
+#72BF78
 
 Blue:
 #008CBA

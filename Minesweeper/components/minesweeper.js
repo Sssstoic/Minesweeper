@@ -9,7 +9,7 @@ const Minesweeper = ({ route, navigation }) => {
   const getBoardConfig = (diff) => {
     switch (diff) {
       case 1: // Easy
-        return { boardSize: 10, bombCount: 8 };
+        return { boardSize: 8, bombCount: 8 };
       case 2: // Medium
         return { boardSize: 12, bombCount: 15 };
       case 3: // Hard

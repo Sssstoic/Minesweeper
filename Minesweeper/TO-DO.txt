@@ -4,4 +4,4 @@
 * FiX Hints: I want Easy mode to have 2 hints. Medium 1 hint. Hard 0 hints.
 * Fix tile reveal: When the player presses a tile for the first time, it should make a small "explosion" to show an area of the map. That explosion should't be too big nor too small.
 * Fix tile sizes: The size of the tiles might have to change depending on the difficulty. (More tiles = Smaller Tiles).
-
+* Add sound effects

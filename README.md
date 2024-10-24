@@ -8,10 +8,7 @@
 
 This project is made for Mobile Application Development Assignment
 
-## Goals:
-* Make a functional Minesweeper Game
-* Make a good soundtrack and add sound effects
-* Add Instructions and Settings
-* Add Easy, Medium, and Hard mode
+
+
 
 

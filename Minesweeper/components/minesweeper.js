@@ -20,20 +20,7 @@ const Minesweeper = ({ route, navigation }) => {
   };
 
   const { boardSize, bombCount } = getBoardConfig(difficulty);
-  // Function to determine hint count based on difficulty
-const getHintCount = (difficulty) => {
-  switch (difficulty) {
-    case 'easy':
-      return 2;
-    case 'medium':
-      return 1;
-    case 'hard':
-      return 0;
-    default:
-      return 0; // Default to 0 hints if difficulty is not recognized
-  }
-};
-
+  
   const hintCount = 2;
   const [board, setBoard] = useState([]);
   const [flagsLeft, setFlagsLeft] = useState(bombCount);

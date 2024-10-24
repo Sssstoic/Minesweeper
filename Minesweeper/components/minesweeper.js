@@ -9,7 +9,7 @@ const Minesweeper = ({ route, navigation }) => {
   const getBoardConfig = (diff) => {
     switch (diff) {
       case 1: // Easy
-        return { boardSize: 8, bombCount: 8 };
+        return { boardSize: 4, bombCount: 1 };
       case 2: // Medium
         return { boardSize: 12, bombCount: 15 };
       case 3: // Hard
@@ -186,7 +186,8 @@ const calculateAdjacentBombs = (board) => {
   const checkWin = (updatedBoard) => {
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
-        if (!updatedBoard[row][col].hasBomb && !updatedBoard[row][col].revealed) {
+        const cell = updatedBoard[row][col];
+        if ((cell.hasBomb && cell.revealed) || (!cell.hasBomb && !cell.revealed)) {
           return false;
         }
       }

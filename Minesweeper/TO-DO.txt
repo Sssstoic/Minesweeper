@@ -2,5 +2,5 @@
 
 * Fix the checkWin Function: When the player wins, the game doesn't show the Win Container. 
 * FiX Hints: I want Easy mode to have 2 hints. Medium 1 hint. Hard 0 hints.
-* Fix
+* Fix tile reveal: When the player presses a tile for the first time, it should make a small "explosion" to show an area of the map. That explosion should't be too big nor too small.
 

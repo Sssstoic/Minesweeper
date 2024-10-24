@@ -1,1 +1,7 @@
+# TO-DO
+
 * Fix the checkWin Function: When the player wins, the game doesn't show the Win Container. 
+* Hints: I want Easy mode to have 2 hints. Medium 1 hint. Hard 0 hints.
+
+
+

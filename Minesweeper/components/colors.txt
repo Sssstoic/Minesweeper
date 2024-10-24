@@ -1,6 +1,23 @@
 Green:
 #78D172
 #7ABA78
+#ACD793
 
 Blue:
 #008CBA
+#5AB2FF
+
+
+Red:
+#E4003A
+#FA7070
+
+Orange:
+#FF8343
+
+Yellow:
+#FFDE4D
+
+Pink:
+#FF76CE
+#987D9A

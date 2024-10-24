@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: 'green',
+    backgroundColor: '#7ABA78',
     padding: 15,
     borderRadius: 5,
     marginBottom: 15,
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mainMenuButton: {
-    backgroundColor: 'blue',
+    backgroundColor: '#5AB2FF',
     padding: 15,
     borderRadius: 5,
     width: '80%',

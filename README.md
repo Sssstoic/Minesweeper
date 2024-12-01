@@ -7,6 +7,7 @@
       Clear the board to win. Good luck!
 
 This project is made for Mobile Application Development Assignment
+Final 2 weeks of the project.
 
 
 

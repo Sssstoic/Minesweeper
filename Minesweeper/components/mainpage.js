@@ -51,7 +51,7 @@ const MainPage = ({ navigation }) => {
         value={difficulty}
         onValueChange={(value) => setDifficulty(value)} 
         onSlidingComplete={handleSlidingComplete}
-        step={0.01}  // Allows smooth sliding
+        step={0.01}  
         minimumTrackTintColor={getDifficultyColor(difficulty)}
         maximumTrackTintColor="#000000"
         thumbTintColor={getDifficultyColor(difficulty)}

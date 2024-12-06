@@ -8,9 +8,9 @@ const MainPage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const getDifficultyColor = (value) => {
-    if (value < 1.5) return '#7ABA78';  // Easy
-    if (value < 2.5) return '#FABC3F';  // Medium
-    return '#C80036';                   // Hard
+    if (value < 1.5) return '#7ABA78';  
+    if (value < 2.5) return '#FABC3F'; 
+    return '#C80036';                   
   };
 
   const getDifficultyText = (value) => {

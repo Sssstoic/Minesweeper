@@ -6,13 +6,14 @@
       3. Use the flag on a cell if you think there's a mine.
       Clear the board to win. Good luck!
 
+--- 
+
 This project is made for Mobile Application Development Assignment
-Final 2 weeks of the project.
-
-
 
 
 ## Collaborators
 MalekMansour
 Sssstoic
 Vardan07-VJ
+
+---

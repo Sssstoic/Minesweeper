@@ -10,9 +10,4 @@
 
 This project is made for Mobile Application Development Assignment
 
-## Collaborators
-MalekMansour
-Sssstoic
-Vardan07-VJ
-
 ---

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
 
 const Minesweeper = ({ route, navigation }) => {
   const { difficulty } = route.params;
@@ -20,7 +19,7 @@ const Minesweeper = ({ route, navigation }) => {
   };
 
   const { boardSize, bombCount } = getBoardConfig(difficulty);
-  
+
   const hintCount = 2;
   const [board, setBoard] = useState([]);
   const [flagsLeft, setFlagsLeft] = useState(bombCount);
@@ -29,7 +28,6 @@ const Minesweeper = ({ route, navigation }) => {
   const [isGameWon, setIsGameWon] = useState(false);
   const [selectedTool, setSelectedTool] = useState('shovel');
   const [isFirstMove, setIsFirstMove] = useState(true);
-  const [allBombsRevealed, setAllBombsRevealed] = useState(false);
 
   const initializeBoard = () => {
     let newBoard = Array(boardSize)
@@ -48,10 +46,8 @@ const Minesweeper = ({ route, navigation }) => {
     setGameOver(false);
     setIsGameWon(false);
     setIsFirstMove(true);
-    setAllBombsRevealed(false);
   };
 
-  // Place bombs, ensuring no bomb is near the first click (1-cell buffer)
   const placeBombs = (firstRow, firstCol) => {
     let bombsPlaced = 0;
     const updatedBoard = [...board];
@@ -69,67 +65,60 @@ const Minesweeper = ({ route, navigation }) => {
     setBoard(updatedBoard);
   };
 
-const isAdjacentToFirstClick = (row, col, firstRow, firstCol, radius = 0) => {
-  // Adjust the radius to control the size of the first reveal area
-  // radius = 0 -> only reveal the clicked cell
-  // radius = 1 -> reveal the 3x3 area (current behavior)
-  // You can modify the radius to your needs
-  return Math.abs(row - firstRow) <= radius && Math.abs(col - firstCol) <= radius;
-};
+  const isAdjacentToFirstClick = (row, col, firstRow, firstCol, radius = 0) => {
+    return Math.abs(row - firstRow) <= radius && Math.abs(col - firstCol) <= radius;
+  };
 
-// Calculate the number of bombs adjacent to each cell
-const calculateAdjacentBombs = (board) => {
-  const directions = [
-    [0, 1], [1, 1], [1, 0], [1, -1],
-    [0, -1], [-1, -1], [-1, 0], [-1, 1],
-  ];
+  const calculateAdjacentBombs = (board) => {
+    const directions = [
+      [0, 1], [1, 1], [1, 0], [1, -1],
+      [0, -1], [-1, -1], [-1, 0], [-1, 1],
+    ];
 
-  for (let row = 0; row < boardSize; row++) {
-    for (let col = 0; col < boardSize; col++) {
-      if (board[row][col].hasBomb) continue;
-      let adjacentBombs = 0;
-      directions.forEach(([dx, dy]) => {
-        const newRow = row + dx;
-        const newCol = col + dy;
-        if (
-          newRow >= 0 && newRow < boardSize &&
-          newCol >= 0 && newCol < boardSize &&
-          board[newRow][newCol].hasBomb
-        ) {
-          adjacentBombs++;
-        }
-      });
-      board[row][col].adjacentBombs = adjacentBombs;
+    for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+        if (board[row][col].hasBomb) continue;
+        let adjacentBombs = 0;
+        directions.forEach(([dx, dy]) => {
+          const newRow = row + dx;
+          const newCol = col + dy;
+          if (
+            newRow >= 0 && newRow < boardSize &&
+            newCol >= 0 && newCol < boardSize &&
+            board[newRow][newCol].hasBomb
+          ) {
+            adjacentBombs++;
+          }
+        });
+        board[row][col].adjacentBombs = adjacentBombs;
+      }
     }
-  }
-};
+  };
 
   const handleCellPress = (row, col) => {
     if (gameOver || board[row][col].revealed) return;
-
+  
     if (isFirstMove) {
-      placeBombs(row, col);
+      placeBombs(row, col); // Place bombs on the board after the first move
       setIsFirstMove(false);
     }
-
+  
     const updatedBoard = [...board];
     const cell = updatedBoard[row][col];
-
+  
     if (selectedTool === 'shovel') {
       if (cell.hasBomb) {
+        // Bomb revealed, game over
         cell.revealed = true;
         setBoard(updatedBoard);
         revealBombs(); 
         setGameOver(true);
         setGameLost(true);
       } else {
-        revealCell(row, col, updatedBoard);
-        if (checkWin(updatedBoard)) {
-          setIsGameWon(true);
-          setGameOver(true);
-        }
+        revealCell(row, col, updatedBoard); // Reveal the cell
       }
     } else if (selectedTool === 'flag') {
+      // Handle flagging/unflagging a bomb
       if (cell.flagged) {
         cell.flagged = false;
         setFlagsLeft(flagsLeft + 1);
@@ -138,6 +127,12 @@ const calculateAdjacentBombs = (board) => {
         setFlagsLeft(flagsLeft - 1);
       }
       setBoard(updatedBoard);
+    }
+  
+    // Check for win condition after each cell press
+    if (checkWin(updatedBoard)) {
+      setIsGameWon(true);
+      setGameOver(true);
     }
   };
 
@@ -152,7 +147,6 @@ const calculateAdjacentBombs = (board) => {
         }
       }
     }
-    setAllBombsRevealed(true);
   };
 
   const revealCell = (row, col, updatedBoard) => {
@@ -164,13 +158,12 @@ const calculateAdjacentBombs = (board) => {
 
     cell.revealed = true;
 
-    // Modify this part to control how large the revealed area is after the first click
     if (cell.adjacentBombs === 0) {
       const directions = [
         [0, 1], [1, 1], [1, 0], [1, -1],
         [0, -1], [-1, -1], [-1, 0], [-1, 1],
       ];
-      
+
       directions.forEach(([dx, dy]) => {
         const newRow = row + dx;
         const newCol = col + dy;
@@ -183,17 +176,31 @@ const calculateAdjacentBombs = (board) => {
     setBoard([...updatedBoard]);
   };
 
-  // Check if player has won the game
   const checkWin = (updatedBoard) => {
+    let revealedCount = 0;
+    let flaggedCount = 0;
+  
+    // Loop through each cell in the grid
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
         const cell = updatedBoard[row][col];
-        if ((cell.hasBomb && cell.revealed) || (!cell.hasBomb && !cell.revealed)) {
-          return false;
+        
+        if (cell.revealed) {
+          revealedCount++; // Count revealed non-bomb cells
+        }
+  
+        if (cell.flagged && cell.hasBomb) {
+          flaggedCount++; // Count correctly flagged bombs
         }
       }
     }
-    return true;
+  
+    // Check win condition: all non-bomb tiles are revealed
+    const totalNonBombCells = boardSize * boardSize - bombCount;
+    if (revealedCount === totalNonBombCells && flaggedCount === bombCount) {
+      return true; // All non-bomb tiles are revealed and all bombs are flagged
+    }
+    return false; // Not yet won
   };
 
   const useHint = () => {
@@ -247,35 +254,35 @@ const calculateAdjacentBombs = (board) => {
       </View>
 
       <View style={styles.board}>
-  {board.map((row, rowIndex) => (
-    <View key={rowIndex} style={styles.row}>
-      {row.map((cell, colIndex) => (
-        <TouchableOpacity
-          key={colIndex}
-          onPress={() => handleCellPress(rowIndex, colIndex)}
-          style={[
-            styles.cell,
-            cell.revealed && styles.revealedCell,
-            { borderWidth: 3, borderColor: '#333' },
-            { width: 320 / 8, height: 320 / 8 } 
-          ]}
-        >
-          {cell.flagged && !cell.revealed && (
-            <Image source={require('../assets/flag.png')} style={styles.flagIcon} />
-          )}
-          {cell.revealed && !cell.hasBomb && (
-            <Text style={[styles.cellText, getNumberColor(cell.adjacentBombs)]}>
-              {cell.adjacentBombs || ''}
-            </Text>
-          )}
-          {cell.revealed && cell.hasBomb && (
-            <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
-          )}
-        </TouchableOpacity>
-      ))}
-    </View>
-  ))}
-</View>
+        {board.map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.row}>
+            {row.map((cell, colIndex) => (
+              <TouchableOpacity
+                key={colIndex}
+                onPress={() => handleCellPress(rowIndex, colIndex)}
+                style={[
+                  styles.cell,
+                  cell.revealed && styles.revealedCell,
+                  { borderWidth: 3, borderColor: '#333' },
+                  { width: 320 / 8, height: 320 / 8 }
+                ]}
+              >
+                {cell.flagged && !cell.revealed && (
+                  <Image source={require('../assets/flag.png')} style={styles.flagIcon} />
+                )}
+                {cell.revealed && !cell.hasBomb && (
+                  <Text style={[styles.cellText, getNumberColor(cell.adjacentBombs)]}>
+                    {cell.adjacentBombs || ''}
+                  </Text>
+                )}
+                {cell.revealed && cell.hasBomb && (
+                  <Image source={require('../assets/bomb.png')} style={styles.bombIcon} />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
+      </View>
 
       <View style={styles.tools}>
         <View style={styles.bombContainer}>
@@ -300,17 +307,14 @@ const calculateAdjacentBombs = (board) => {
         <TouchableOpacity
           onPress={useHint}
           disabled={hintsLeft === 0}
-          style={[
-            styles.toolButton,
-            hintsLeft === 0 ? styles.disabledHintButton : styles.enabledHintButton,
-          ]}
+          style={[styles.toolButton, hintsLeft === 0 ? styles.disabledHintButton : styles.enabledHintButton]}
         >
           <Image source={require('../assets/hint.png')} style={styles.toolIcon} />
           <Text style={styles.hintCounter}>{hintsLeft}</Text>
         </TouchableOpacity>
       </View>
 
-      {gameOver && allBombsRevealed && renderGameOverScreen()}
+      {gameOver && renderGameOverScreen()}
     </View>
   );
 };

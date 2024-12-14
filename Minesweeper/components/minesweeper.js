@@ -179,28 +179,26 @@ const Minesweeper = ({ route, navigation }) => {
   const checkWin = (updatedBoard) => {
     let revealedCount = 0;
     let flaggedCount = 0;
-  
-    // Loop through each cell in the grid
+
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
         const cell = updatedBoard[row][col];
         
         if (cell.revealed) {
-          revealedCount++; // Count revealed non-bomb cells
+          revealedCount++; 
         }
   
         if (cell.flagged && cell.hasBomb) {
-          flaggedCount++; // Count correctly flagged bombs
+          flaggedCount++; 
         }
       }
     }
-  
-    // Check win condition: all non-bomb tiles are revealed
+
     const totalNonBombCells = boardSize * boardSize - bombCount;
     if (revealedCount === totalNonBombCells && flaggedCount === bombCount) {
-      return true; // All non-bomb tiles are revealed and all bombs are flagged
+      return true; 
     }
-    return false; // Not yet won
+    return false; 
   };
 
   const useHint = () => {
